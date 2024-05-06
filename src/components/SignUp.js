@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import './SignUp.css';
 
 const SignUp = () => {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
-    const handleSignUp = (e) => {
+    const handleSignUp = async (e) => {
         e.preventDefault();
-        // Handle sign up logic here
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            navigate("/main");
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const handleGoogleSignUp = () => {

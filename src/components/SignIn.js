@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {auth} from '../firebase';
 import './SignIn.css';
 
 const SignIn = () => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
-    const handleSignIn = (e) => {
+    const handleSignIn = async (e) => {
         e.preventDefault();
-        // Handle sign in logic here
+        try {
+            await auth.signInWithEmailAndPassword(email, password);
+            navigate("/main");
+          } catch (error) {
+            console.error(error);
+          }
     };
 
     const handleGoogleSignIn = () => {
@@ -18,7 +26,7 @@ const SignIn = () => {
         <div className="signin-container">
             <h2>Sign In</h2>
             <form onSubmit={handleSignIn}>
-                <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                <input type="text" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 <button type="submit">Sign In</button>
             </form>
